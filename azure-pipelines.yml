@@ -1,0 +1,83 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: 
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  bkstrgrg: "AZLabs"
+  bkstrg: "cloudstoragebaueraz"
+  bkcontainer: "terraform-project"
+  bkstrgkey: "terraform-project.tfstate"
+
+stages:
+  - stage: tfvalidate
+    jobs:
+      - job: validate 
+        continueOnError: false
+        steps:
+          - task: TerraformInstaller@1
+            displayName: tfinstall
+            inputs:
+              terraformVersion: 'latest'
+          - task: TerraformTaskV4@4
+            displayName: init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'TerraformPracticeApp'
+              backendAzureRmResourceGroupName: '$(bkstrgrg)'
+              backendAzureRmStorageAccountName: '$(bkstrg)'
+              backendAzureRmContainerName: '$(bkcontainer)'
+              backendAzureRmKey: '$(bkstrgkey)'
+          - task: TerraformTaskV4@4
+            displayName: validate
+            inputs:
+              provider: 'azurerm'
+              command: 'validate'
+  - stage: tfdeploy
+    condition: succeeded('tfvalidate')
+    dependsOn: tfvalidate
+    jobs:
+      - job: deploy
+        steps:
+          - task: AzureKeyVault@2
+            inputs:
+              azureSubscription: '3b8667c6-8f75-42ea-b301-bf27c9db8674'
+              KeyVaultName: 'RBACvault-1'
+              SecretsFilter: 'terraform1'
+            displayName: 'Get Key Vault Secret'
+          - script: |
+              echo "##vso[task.setvariable variable=ARM_CLIENT_SECRET;issecret=true]$(YourSecretValue)"
+            displayName: 'Set Pipeline Variable'
+          - task: TerraformInstaller@1
+            displayName: tfinstall
+            inputs:
+              terraformVersion: 'latest'
+          - task: TerraformTaskV4@4
+            displayName: init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'TerraformPracticeApp'
+              backendAzureRmResourceGroupName: '$(bkstrgrg)'
+              backendAzureRmStorageAccountName: '$(bkstrg)'
+              backendAzureRmContainerName: '$(bkcontainer)'
+              backendAzureRmKey: '$(bkstrgkey)'
+          - task: TerraformTaskV4@4
+            displayName: plan
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              environmentServiceNameAzureRM: 'TerraformPracticeApp'
+          - task: TerraformTaskV4@4
+            displayName: apply
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              environmentServiceNameAzureRM: 'TerraformPracticeApp'
