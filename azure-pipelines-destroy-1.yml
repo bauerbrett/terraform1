@@ -1,0 +1,57 @@
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  bkstrgrg: "AZLabs"
+  bkstrg: "cloudstoragebaueraz"
+  bkcontainer: "terraform-project"
+  bkstrgkey: "terraform-project.tfstate"
+
+stages:
+  - stage: tfdestroy
+    jobs:
+      - job: destroy
+        steps:
+          - task: TerraformInstaller@1
+            displayName: tfinstall
+            inputs:
+              terraformVersion: 'latest'
+              
+          - task: AzureKeyVault@2
+            inputs:
+              azureSubscription: '3b8667c6-8f75-42ea-b301-bf27c9db8674'
+              KeyVaultName: 'RBACvault-1'
+              SecretsFilter: 'terraform1' # Use the appropriate secret name
+            displayName: 'Get Key Vault Secret'
+
+          - powershell: |
+              Write-Host "Setting ARM_CLIENT_SECRET variable..."
+              Write-Host "##vso[task.setvariable variable=ARM_CLIENT_SECRET;]$env:MYCLIENTSECRET"
+            displayName: 'Set ARM_CLIENT_SECRET Variable'
+
+          - task: TerraformTaskV4@4
+            displayName: init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'TerraformPracticeApp'
+              backendAzureRmResourceGroupName: '$(bkstrgrg)'
+              backendAzureRmStorageAccountName: '$(bkstrg)'
+              backendAzureRmContainerName: '$(bkcontainer)'
+              backendAzureRmKey: '$(bkstrgkey)'
+
+          - task: TerraformTaskV4@4
+            displayName: plan
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              environmentServiceNameAzureRM: 'TerraformPracticeApp'
+              
+          - task: TerraformTaskV4@4
+            displayName: destroy
+            inputs:
+              provider: 'azurerm'
+              command: 'destroy'
+              environmentServiceNameAzureRM: 'TerraformPracticeApp'
