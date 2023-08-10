@@ -3,10 +3,10 @@
 variables:
 - group: terraform-project
 
-trigger:
-  branches:
-    include:
-    - main
+trigger: none
+  #branches:
+    #include:
+    #- main
 
 stages:
 - stage: Validate
