@@ -21,6 +21,7 @@ stages:
       inputs:
         terraformVersion: 'latest'
 
+<<<<<<< HEAD
     - task: AzureKeyVault@1
       inputs:
         ConnectedServiceName: $(service_name)
@@ -39,6 +40,19 @@ stages:
         backendAzureRmContainerName: '$(containername)'
         backendAzureRmKey: '$(terraformkey)'
 
+=======
+  # Init
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'terraform2connection'
+        backendAzureRmResourceGroupName: 'AZLabs'
+        backendAzureRmStorageAccountName: '$(storageaccount)'
+        backendAzureRmContainerName: '$(containername)'
+        backendAzureRmKey: '$(terraformkey)'
+
+>>>>>>> b9f7b9bb754cbf05923bb35ea535c11b6d5ffa1e
   # Validate
     - task: TerraformCLI@0
       displayName: Validate Config
@@ -58,6 +72,7 @@ stages:
       inputs:
         terraformVersion: 'latest'
 
+<<<<<<< HEAD
     - task: AzureKeyVault@1
       inputs:
         ConnectedServiceName: $(service_name)
@@ -65,6 +80,8 @@ stages:
         secretsFilter: '*'
         runAsPreJob: false # Azure DevOps Services only
 
+=======
+>>>>>>> b9f7b9bb754cbf05923bb35ea535c11b6d5ffa1e
   # Init
     - task: TerraformTaskV4@4
       inputs:
@@ -113,6 +130,7 @@ stages:
       displayName: tfinstall
       inputs:
         terraformVersion: 'latest'
+<<<<<<< HEAD
     
     - task: AzureKeyVault@1
       inputs:
@@ -120,6 +138,8 @@ stages:
         keyVaultName: $(key_vault_name)
         secretsFilter: '*'
         runAsPreJob: false # Azure DevOps Services only
+=======
+>>>>>>> b9f7b9bb754cbf05923bb35ea535c11b6d5ffa1e
 
   # Init
     - task: TerraformTaskV4@4
@@ -134,14 +154,22 @@ stages:
 
   # Apply
     - task: TerraformCLI@0
+<<<<<<< HEAD
       displayName: Apply Terraform Deployment
+=======
+      displayName: Destroy Terraform Deployment
+>>>>>>> b9f7b9bb754cbf05923bb35ea535c11b6d5ffa1e
       env:
         ARM_CLIENT_ID: $(az_clientid)
         ARM_CLIENT_SECRET: $(terraform1)
         ARM_SUBSCRIPTION_ID: $(az_subscription1)
         ARM_TENANT_ID: $(az_tenantid)
       inputs:
+<<<<<<< HEAD
         command: 'apply'
+=======
+        command: 'destroy'
+>>>>>>> b9f7b9bb754cbf05923bb35ea535c11b6d5ffa1e
         workingDirectory: '$(System.DefaultWorkingDirectory)'
         commandOptions: '-auto-approve'
     

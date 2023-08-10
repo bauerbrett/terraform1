@@ -21,6 +21,13 @@ stages:
       inputs:
         terraformVersion: 'latest'
 
+    - task: AzureKeyVault@1
+      inputs:
+        ConnectedServiceName: $(service_name)
+        keyVaultName: $(key_vault_name)
+        secretsFilter: '*'
+        runAsPreJob: false # Azure DevOps Services only
+
   # Init
     - task: TerraformTaskV4@4
       inputs:
@@ -50,6 +57,13 @@ stages:
       displayName: tfinstall
       inputs:
         terraformVersion: 'latest'
+
+    - task: AzureKeyVault@1
+      inputs:
+        ConnectedServiceName: $(service_name)
+        keyVaultName: $(key_vault_name)
+        secretsFilter: '*'
+        runAsPreJob: false # Azure DevOps Services only
 
   # Init
     - task: TerraformTaskV4@4
@@ -99,6 +113,13 @@ stages:
       displayName: tfinstall
       inputs:
         terraformVersion: 'latest'
+    
+    - task: AzureKeyVault@1
+      inputs:
+        ConnectedServiceName: $(service_name)
+        keyVaultName: $(key_vault_name)
+        secretsFilter: '*'
+        runAsPreJob: false # Azure DevOps Services only
 
   # Init
     - task: TerraformTaskV4@4
