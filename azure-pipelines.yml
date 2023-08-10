@@ -67,8 +67,8 @@ stages:
               command: 'plan'
               environmentServiceNameAzureRM: 'terraform2connection'
           - task: TerraformTaskV4@4
-            displayName: destroy
+            displayName: apply
             inputs:
               provider: 'azurerm'
-              command: 'destroy'
+              command: 'apply'
               environmentServiceNameAzureRM: 'terraform2connection'
