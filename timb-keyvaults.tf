@@ -22,7 +22,7 @@ resource "azurerm_key_vault_key" "timb-testvm1-key" {
   key_vault_id = azurerm_key_vault.timb-key-disk.id
   key_type     = "RSA"
   key_size     = 2048
-  depends_on = [azurerm_key_vault.timb-key-disk, azurerm_key_vault_access_policy.myPolicy]
+  depends_on = [azurerm_key_vault.timb-key-disk]
 
     key_opts = [
     "decrypt",
