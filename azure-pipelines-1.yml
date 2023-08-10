@@ -36,7 +36,7 @@ stages:
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)'
-        commandOptions: '-backend-config=storage_account_name=$(storageaccount) -backend-config=container_name=$(containername) -backend-config=key=$(terraformkey) -backend-config=use_azuread_auth=true'
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount) -backend-config=container_name=$(containername) -backend-config=key=$(terraformkey)'
         backendType: 'selfConfigured'
 
   # Validate
