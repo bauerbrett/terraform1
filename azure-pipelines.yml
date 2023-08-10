@@ -16,19 +16,21 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: TerraformInstaller@0
-      displayName: Install Terraform
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+      displayName: tfinstall
       inputs:
         terraformVersion: 'latest'
 
   # Init
-    - task: TerraformCLI@0
-      displayName: Initialize Terraform
+    - task: TerraformTaskV4@4
       inputs:
+        provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)'
-        commandOptions: '-backend-config=storage_account_name=$(storageaccount) -backend-config=container_name=$(containername) -backend-config=key=$(terraformkey) -backend-config=use_azuread_auth=true'
-        backendType: 'selfConfigured'
+        backendServiceArm: 'terraform2connection'
+        backendAzureRmResourceGroupName: 'AZLabs'
+        backendAzureRmStorageAccountName: '$(storageaccount)'
+        backendAzureRmContainerName: '$(containername)'
+        backendAzureRmKey: '$(terraformkey)'
 
   # Validate
     - task: TerraformCLI@0
@@ -44,19 +46,21 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: TerraformInstaller@0
-      displayName: Install Terraform
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+      displayName: tfinstall
       inputs:
         terraformVersion: 'latest'
 
   # Init
-    - task: TerraformCLI@0
-      displayName: Initialize Terraform
+    - task: TerraformTaskV4@4
       inputs:
+        provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)'
-        commandOptions: '-backend-config=storage_account_name=$(storageaccount) -backend-config=container_name=$(containername) -backend-config=key=$(terraformkey) -backend-config=use_azuread_auth=true'
-        backendType: 'selfConfigured'
+        backendServiceArm: 'terraform2connection'
+        backendAzureRmResourceGroupName: 'AZLabs'
+        backendAzureRmStorageAccountName: '$(storageaccount)'
+        backendAzureRmContainerName: '$(containername)'
+        backendAzureRmKey: '$(terraformkey)'
 
   # Plan
     - task: TerraformCLI@0
@@ -91,19 +95,21 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: TerraformInstaller@0
-      displayName: Install Terraform
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+      displayName: tfinstall
       inputs:
         terraformVersion: 'latest'
 
   # Init
-    - task: TerraformCLI@0
-      displayName: Initialize Terraform
+    - task: TerraformTaskV4@4
       inputs:
+        provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)'
-        commandOptions: '-backend-config=storage_account_name=$(storageaccount) -backend-config=container_name=$(containername) -backend-config=key=$(terraformkey) -backend-config=use_azuread_auth=true'
-        backendType: 'selfConfigured'
+        backendServiceArm: 'terraform2connection'
+        backendAzureRmResourceGroupName: 'AZLabs'
+        backendAzureRmStorageAccountName: '$(storageaccount)'
+        backendAzureRmContainerName: '$(containername)'
+        backendAzureRmKey: '$(terraformkey)'
 
   # Apply
     - task: TerraformCLI@0
@@ -117,3 +123,4 @@ stages:
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)'
         commandOptions: '-auto-approve'
+    
