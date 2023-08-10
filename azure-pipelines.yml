@@ -48,7 +48,7 @@ stages:
         steps:
           - task: AzureKeyVault@2
             inputs:
-              azureSubscription: '3b8667c6-8f75-42ea-b301-bf27c9db8674'
+              azureSubscription: 'bauerbrett1-Terraform Practice-134888ca-e6f2-4fb6-9b49-3042d590ea87'
               KeyVaultName: 'RBACvault-1'
               SecretsFilter: 'terraform1'
             displayName: 'Get Key Vault Secret'
