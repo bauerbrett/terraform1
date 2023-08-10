@@ -16,7 +16,7 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: TerraformInstaller@1
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
       displayName: tfinstall
       inputs:
         terraformVersion: 'latest'
@@ -44,7 +44,7 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: TerraformInstaller@1
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
       displayName: tfinstall
       inputs:
         terraformVersion: 'latest'
@@ -91,7 +91,7 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: TerraformInstaller@1
+    - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
       displayName: tfinstall
       inputs:
         terraformVersion: 'latest'
