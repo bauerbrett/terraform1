@@ -1,6 +1,8 @@
 terraform {
   backend "azurerm" {
     subscription_id      = "3b8667c6-8f75-42ea-b301-bf27c9db8674"
+    client_id           = "f8cc3675-828e-439b-b5d8-0f02507e5550"
+    client_secret          = "VX~8Q~T1lxb_sJyEVz~qVt7Po6p_rix3UQARIa61"
     resource_group_name  = "AZLabs"
     storage_account_name = "cloudstoragebaueraz"
     container_name       = "terraform-project"
