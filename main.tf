@@ -10,6 +10,7 @@ terraform {
   backend "azurerm" {
     
   }
+}
 
 # Resource Manager Default Sub
 provider "azurerm" {
