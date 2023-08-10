@@ -14,34 +14,6 @@ resource "azurerm_key_vault" "timb-key-disk" {
 
     sku_name = "standard"
     depends_on = [azurerm_resource_group.timb_prod_vms]
-
-  network_acls {
-    # The Default Action to use when no rules match from ip_rules / 
-    # virtual_network_subnet_ids. Possible values are Allow and Deny
-    default_action = "Deny"
-
-    # Allows all azure services to access your keyvault. Can be set to 'None'
-    bypass         = "AzureServices"
-
-    # The list of allowed ip addresses.
-    ip_rules       = ["24.143.44.6"]
-
-  }
-}
-resource "azurerm_key_vault_access_policy" "myPolicy" {
-  provider = azurerm.timbdev
-  key_vault_id = azurerm_key_vault.timb-key-disk.id
-
-  tenant_id = data.azurerm_client_config.current.tenant_id
-  object_id = data.azurerm_client_config.current.object_id
-  
-  key_permissions = [
-    "Get",
-    "Create",
-    "Delete",
-    "WrapKey",
-    "UnwrapKey"
-  ]
 }
 #timb-testvm1 disk key
 resource "azurerm_key_vault_key" "timb-testvm1-key" {

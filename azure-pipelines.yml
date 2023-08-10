@@ -1,74 +1,119 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
-trigger: 
-- main
-
-pool:
-  vmImage: ubuntu-latest
+# Azure DevOps pipeline for Azure deployment
 
 variables:
-  bkstrgrg: "AZLabs"
-  bkstrg: "cloudstoragebaueraz"
-  bkcontainer: "terraform-project"
-  bkstrgkey: "terraform-project.tfstate"
+- group: terraform-project
+
+trigger:
+  branches:
+    include:
+    - main
 
 stages:
-  - stage: tfvalidate
-    jobs:
-      - job: validate 
-        continueOnError: false
-        steps:
-          - task: TerraformInstaller@1
-            displayName: tfinstall
-            inputs:
-              terraformVersion: 'latest'
-          - task: TerraformTaskV4@4
-            displayName: init
-            inputs:
-              provider: 'azurerm'
-              command: 'init'
-              backendServiceArm: 'terraform2connection'
-              backendAzureRmResourceGroupName: '$(bkstrgrg)'
-              backendAzureRmStorageAccountName: '$(bkstrg)'
-              backendAzureRmContainerName: '$(bkcontainer)'
-              backendAzureRmKey: '$(bkstrgkey)'
-          - task: TerraformTaskV4@4
-            displayName: validate
-            inputs:
-              provider: 'azurerm'
-              command: 'validate'
-  - stage: tfdeploy
-    condition: succeeded('tfvalidate')
-    dependsOn: tfvalidate
-    jobs:
-      - job: deploy
-        steps:
-          - task: TerraformInstaller@1
-            displayName: tfinstall
-            inputs:
-              terraformVersion: 'latest'
-          - task: TerraformTaskV4@4
-            displayName: init
-            inputs:
-              provider: 'azurerm'
-              command: 'init'
-              backendServiceArm: 'terraform2connection'
-              backendAzureRmResourceGroupName: '$(bkstrgrg)'
-              backendAzureRmStorageAccountName: '$(bkstrg)'
-              backendAzureRmContainerName: '$(bkcontainer)'
-              backendAzureRmKey: '$(bkstrgkey)'
-          - task: TerraformTaskV4@4
-            displayName: plan
-            inputs:
-              provider: 'azurerm'
-              command: 'plan'
-              environmentServiceNameAzureRM: 'terraform2connection'
-          - task: TerraformTaskV4@4
-            displayName: destroy
-            inputs:
-              provider: 'azurerm'
-              command: 'destroy'
-              environmentServiceNameAzureRM: 'terraform2connection'
+- stage: Validate
+  displayName: Validate
+  jobs:
+  - job: validate
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: TerraformInstaller@0
+      displayName: Install Terraform
+      inputs:
+        terraformVersion: 'latest'
+
+  # Init
+    - task: TerraformCLI@0
+      displayName: Initialize Terraform
+      inputs:
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount) -backend-config=container_name=$(containername) -backend-config=key=$(terraformkey) -backend-config=use_azuread_auth=true'
+        backendType: 'selfConfigured'
+
+  # Validate
+    - task: TerraformCLI@0
+      displayName: Validate Config
+      inputs:
+        command: 'validate'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+    
+- stage: Plan
+  displayName: Plan
+  jobs:
+  - job: plan
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: TerraformInstaller@0
+      displayName: Install Terraform
+      inputs:
+        terraformVersion: 'latest'
+
+  # Init
+    - task: TerraformCLI@0
+      displayName: Initialize Terraform
+      inputs:
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount) -backend-config=container_name=$(containername) -backend-config=key=$(terraformkey) -backend-config=use_azuread_auth=true'
+        backendType: 'selfConfigured'
+
+  # Plan
+    - task: TerraformCLI@0
+      displayName: Plan Terraform Deployment
+      env:
+        ARM_CLIENT_ID: $(az_clientid)
+        ARM_CLIENT_SECRET: $(terraform1)
+        ARM_SUBSCRIPTION_ID: $(az_subscription1)
+        ARM_TENANT_ID: $(az_tenantid)
+      inputs:
+        command: 'plan'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+# Approve
+- stage: Approve
+  displayName: Approve
+  jobs:
+  - job: approve
+    displayName: Wait for approval
+    pool: server
+    steps: 
+    - task: ManualValidation@0
+      timeoutInMinutes: 60
+      inputs:
+        notifyUsers: 'bauebrett1@gmail.com'
+        instructions: 'Review the plan in the next hour'
+
+- stage: Apply
+  displayName: Apply
+  jobs:
+  - job: apply
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: TerraformInstaller@0
+      displayName: Install Terraform
+      inputs:
+        terraformVersion: 'latest'
+
+  # Init
+    - task: TerraformCLI@0
+      displayName: Initialize Terraform
+      inputs:
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount) -backend-config=container_name=$(containername) -backend-config=key=$(terraformkey) -backend-config=use_azuread_auth=true'
+        backendType: 'selfConfigured'
+
+  # Apply
+    - task: TerraformCLI@0
+      displayName: Apply Terraform Deployment
+      env:
+        ARM_CLIENT_ID: $(az_clientid)
+        ARM_CLIENT_SECRET: $(terraform1)
+        ARM_SUBSCRIPTION_ID: $(az_subscription1)
+        ARM_TENANT_ID: $(az_tenantid)
+      inputs:
+        command: 'apply'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
+        commandOptions: '-auto-approve'
