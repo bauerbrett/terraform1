@@ -50,8 +50,6 @@ provider "azurerm" {
 # Azure AD
 provider "azuread" {
   version = ">=0.7.0"
-  client_id       = "f8cc3675-828e-439b-b5d8-0f02507e5550"
-  client_secret   = "6z.8Q~hy6hi0eIHJ-p4cZn4evhS1GNFSiG3qPasE"
   tenant_id       = "134888ca-e6f2-4fb6-9b49-3042d590ea87"
 }
 
