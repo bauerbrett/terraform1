@@ -1,3 +1,12 @@
+terraform {
+  backend "azurerm" {
+    subscription_id      = "3b8667c6-8f75-42ea-b301-bf27c9db8674"
+    resource_group_name  = "AZLabs"
+    storage_account_name = "cloudstoragebaueraz"
+    container_name       = "terraform-project"
+    key                  = "terraform-project.tfstate"
+  }
+}
 # Azure Resource Manager Default Sub
 provider "azurerm" {
   version = ">=2.0.0"
