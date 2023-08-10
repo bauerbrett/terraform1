@@ -16,7 +16,7 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: Install Terraform
       inputs:
         terraformVersion: 'latest'
@@ -44,7 +44,7 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       displayName: Install Terraform
       inputs:
         terraformVersion: 'latest'
@@ -91,7 +91,7 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller
+    - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller.@0
       displayName: Install Terraform
       inputs:
         terraformVersion: 'latest'
@@ -117,3 +117,4 @@ stages:
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)'
         commandOptions: '-auto-approve'
+    
