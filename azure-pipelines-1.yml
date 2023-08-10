@@ -76,7 +76,7 @@ stages:
         ARM_SAS_TOKEN: $(SAStoken)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/2021-05-25-ADO/vnet'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
         commandOptions: '-backend-config=storage_account_name=$(storageaccount) -backend-config=container_name=$(containername) -backend-config=key=$(terraformkey) -backend-config=use_azuread_auth=true'
         backendType: 'selfConfigured'
 
