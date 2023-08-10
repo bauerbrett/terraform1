@@ -46,15 +46,6 @@ stages:
     jobs:
       - job: deploy
         steps:
-          - task: AzureKeyVault@2
-            inputs:
-              azureSubscription: 'Azure subscription 1'
-              KeyVaultName: 'RBACvault-1'
-              SecretsFilter: 'terraform1'
-            displayName: 'Get Key Vault Secret'
-          - script: |
-              echo "##vso[task.setvariable variable=ARM_CLIENT_SECRET;issecret=true]$(YourSecretValue)"
-            displayName: 'Set Pipeline Variable'
           - task: TerraformInstaller@1
             displayName: tfinstall
             inputs:
