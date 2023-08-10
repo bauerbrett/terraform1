@@ -83,6 +83,7 @@ stages:
         ARM_CLIENT_SECRET: $(terraform1)
         ARM_CLIENT_ID: $(az_clientid)
         ARM_TENANT_ID: $(az_tenantid)
+        ARM_SUBSCRIPTION_ID: $(az_subscription1)
       inputs:
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)'
@@ -138,6 +139,7 @@ stages:
         ARM_CLIENT_ID: $(az_clientid)
         ARM_CLIENT_SECRET: $(terraform1)
         ARM_TENANT_ID: $(az_tenantid)
+        ARM_SUBSCRIPTION_ID: $(az_subscription1)
       inputs:
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)'
