@@ -42,11 +42,6 @@ stages:
   # Validate
     - task: TerraformCLI@0
       displayName: Validate Config
-      env:
-        ARM_CLIENT_ID: $(az_clientid)
-        ARM_CLIENT_SECRET: $(terraform1)
-        ARM_SUBSCRIPTION_ID: $(az_subscription1)
-        ARM_TENANT_ID: $(az_tenantid)
       inputs:
         command: 'validate'
         workingDirectory: '$(System.DefaultWorkingDirectory)'
