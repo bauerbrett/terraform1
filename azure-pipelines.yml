@@ -82,7 +82,6 @@ stages:
       env:
         ARM_CLIENT_SECRET: $(terraform1)
         ARM_CLIENT_ID: $(az_clientid)
-        ARM_SUBSCRIPTION_ID: $(az_subscription1)
         ARM_TENANT_ID: $(az_tenantid)
       inputs:
         command: 'plan'
@@ -138,7 +137,6 @@ stages:
       env:
         ARM_CLIENT_ID: $(az_clientid)
         ARM_CLIENT_SECRET: $(terraform1)
-        ARM_SUBSCRIPTION_ID: $(az_subscription1)
         ARM_TENANT_ID: $(az_tenantid)
       inputs:
         command: 'apply'
