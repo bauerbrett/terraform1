@@ -116,15 +116,15 @@ stages:
       inputs:
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)'
-        commandOptions: '-out=$(System.DefaultWorkingDirectory)/main1.tfplan'
+        commandOptions: '-out=$(System.DefaultWorkingDirectory)/main.tfplan'
         publishPlanResults: 'Terraform Plan'
     
     - script: |
         set +e  # Disable immediate exit on error
         cd $(System.DefaultWorkingDirectory)
         ls
-        terraform show -json main1.tfplan > $(System.DefaultWorkingDirectory)/main.json
-        checkov -f $(System.DefaultWorkingDirectory)/main.json > $(System.DefaultWorkingDirectory)/plan-checkov-report.xml
+        terraform show -json main.tfplan > $(System.DefaultWorkingDirectory)/main.json
+        checkov -f $(System.DefaultWorkingDirectory)/main.json -o junitxml > $(System.DefaultWorkingDirectory)/plan-checkov-report.xml
         checkov_exit_code=$?
         set -e  # Enable exit on error
 
