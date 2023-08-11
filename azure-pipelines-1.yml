@@ -49,7 +49,7 @@ stages:
     
     - bash: |
         mkdir checkov-report
-        checkov -d . --skip-path ./*.json --check MEDIUM --output junitxml > $(System.DefaultWorkingDirectory)/checkov-report/TEST-checkov-report.xml
+        checkov -d $(System.DefaultWorkingDirectory) --check MEDIUM --output junitxml > $(System.DefaultWorkingDirectory)/checkov-report/TEST-checkov-report.xml
       displayName: 'Check Terraform Files'
       name: TerraformCheck
     
@@ -58,7 +58,7 @@ stages:
       condition: succeededOrFailed()
       inputs:
         testResultsFormat: 'JUnit'
-        testResultsFile: '**/TEST-*.xml'
+        testResultsFile: '**/TEST-*-*.xml'
         searchFolder: '$(System.DefaultWorkingDirectory)/checkov-report'
         mergeTestResults: false
         testRuntitle: CheckOV Scan
@@ -108,14 +108,14 @@ stages:
       inputs:
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)'
-        commandOptions: '-out=$(System.DefaultWorkingDirectory)/plans/main.tfplan'
+        commandOptions: '-out=$(System.DefaultWorkingDirectory)/main.tfplan'
         publishPlanResults: 'Terraform Plan'
 
     - bash: |
-        cd $(System.DefaultWorkingDirectory)/plans
+        cd $(System.DefaultWorkingDirectory)
         ls
-        terraform show -json main.tfplan > $(System.DefaultWorkingDirectory)/plans/tfplan.json
-        checkov -f $(System.DefaultWorkingDirectory)/plans/tfplan.json > $(System.DefaultWorkingDirectory)/checkov-report/plan-checkov-report-xml
+        terraform show -json main.tfplan > $(System.DefaultWorkingDirectory)/tfplan.json
+        checkov -f $(System.DefaultWorkingDirectory)/tfplan.json > $(System.DefaultWorkingDirectory)/plan-checkov-report-xml
       displayName: 'Scan and Verify Plan'
       name: checkovplanscan
       env:
