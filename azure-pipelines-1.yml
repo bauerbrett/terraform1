@@ -47,7 +47,7 @@ stages:
         command: 'validate'
         workingDirectory: '$(System.DefaultWorkingDirectory)'
     
-    - bash: checkov -d $(System.DefaultWorkingDirectory) --output junitxml > $(System.DefaultWorkingDirectory)/TEST-checkov-report.xml
+    - bash: checkov -d $(System.DefaultWorkingDirectory) -o junitxml > $(System.DefaultWorkingDirectory)/TEST-checkov-report.xml
       displayName: 'Check Terraform Files'
       name: TerraformCheck
     
@@ -113,7 +113,7 @@ stages:
         cd $(System.DefaultWorkingDirectory)
         ls
         terraform show -json main.tfplan > $(System.DefaultWorkingDirectory)/main.json
-        checkov -f $(System.DefaultWorkingDirectory)/tfplan.json > $(System.DefaultWorkingDirectory)/plan-checkov-report-xml
+        checkov -f $(System.DefaultWorkingDirectory)/main.json > $(System.DefaultWorkingDirectory)/plan-checkov-report-xml
       displayName: 'Scan and Verify Plan'
       name: checkovplanscan
       env:
