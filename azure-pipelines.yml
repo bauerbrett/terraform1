@@ -62,7 +62,7 @@ stages:
       name: TerraformCheck
     
     - task: PublishTestResults@2
-      displayName: 'Publish checkov Test Results'
+      displayName: 'Publish Checkov Test Results'
       condition: succeededOrFailed()
       inputs:
         testResultsFormat: 'JUnit'
@@ -124,7 +124,7 @@ stages:
         cd $(System.DefaultWorkingDirectory)
         ls
         terraform show -json main1.tfplan > $(System.DefaultWorkingDirectory)/main.json
-        checkov -f $(System.DefaultWorkingDirectory)/main.json > $(System.DefaultWorkingDirectory)/plan-checkov-report-xml
+        checkov -f $(System.DefaultWorkingDirectory)/main.json > $(System.DefaultWorkingDirectory)/plan-checkov-report.xml
         set -e  # Enable exit on error
 
         if [ $checkov_exit_code -ne 0 ]; then
