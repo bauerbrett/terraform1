@@ -47,9 +47,7 @@ stages:
         command: 'validate'
         workingDirectory: '$(System.DefaultWorkingDirectory)'
     
-    - bash: |
-        mkdir checkov-report
-        checkov -d $(System.DefaultWorkingDirectory) --output junitxml > $(System.DefaultWorkingDirectory)/TEST-checkov-report.xml
+    - bash: checkov -d $(System.DefaultWorkingDirectory) --output junitxml > $(System.DefaultWorkingDirectory)/TEST-checkov-report.xml
       displayName: 'Check Terraform Files'
       name: TerraformCheck
     
