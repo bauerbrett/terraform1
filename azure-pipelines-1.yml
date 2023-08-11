@@ -113,7 +113,7 @@ stages:
         terraform show -json main.tfplan > $(System.DefaultWorkingDirectory)/plans/tfplan.json
         checkov -f $(System.DefaultWorkingDirectory)/plans/tfplan.json > $(System.DefaultWorkingDirectory)/checkov-report/plan-checkov-report-xml
       displayName: 'Scan and Verify Plan'
-      name: 'checkov plan scan'
+      name: checkovplanscan
       env:
         ARM_SAS_TOKEN: $(SAStoken)
         ARM_CLIENT_ID: $(az-clientid)
