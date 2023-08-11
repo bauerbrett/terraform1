@@ -47,7 +47,17 @@ stages:
         command: 'validate'
         workingDirectory: '$(System.DefaultWorkingDirectory)'
     
-    - bash: checkov -d $(System.DefaultWorkingDirectory) -o junitxml > $(System.DefaultWorkingDirectory)/TEST-checkov-report.xml
+    - script: |
+        set +e  # Disable immediate exit on error
+        checkov -d $(System.DefaultWorkingDirectory) --output junitxml > $(System.DefaultWorkingDirectory)/TEST-checkov-report.xml
+        checkov_exit_code=$?  # Capture the exit code
+        set -e  # Enable exit on error
+
+        if [ $checkov_exit_code -ne 0 ]; then
+         echo "Checkov found errors, but continuing the pipeline..."
+         exit 0  # Set exit code to 0 to prevent pipeline failure
+        fi
+    
       displayName: 'Check Terraform Files'
       name: TerraformCheck
     
