@@ -47,7 +47,7 @@ stages:
         command: 'validate'
         workingDirectory: '$(System.DefaultWorkingDirectory)'
     
-    - script: |
+    - script: | #This is to bybass the errors that will pop up. I do this because I am practicing so I know the code is not secure.
         set +e  # Disable immediate exit on error
         checkov -d $(System.DefaultWorkingDirectory) --output junitxml > $(System.DefaultWorkingDirectory)/TEST-checkov-report.xml
         checkov_exit_code=$?  # Capture the exit code
@@ -119,7 +119,7 @@ stages:
         commandOptions: '-out=$(System.DefaultWorkingDirectory)/main.tfplan'
         publishPlanResults: 'Terraform Plan'
     
-    - script: |
+    - script: | #This is to bybass the errors that will pop up. I do this because I am practicing so I know the code is not secure.
         set +e  # Disable immediate exit on error
         cd $(System.DefaultWorkingDirectory)
         ls
@@ -127,7 +127,7 @@ stages:
         checkov -f $(System.DefaultWorkingDirectory)/main.json -o junitxml > $(System.DefaultWorkingDirectory)/plan-checkov-report.xml
         checkov_exit_code=$?
         set -e  # Enable exit on error
-
+        
         if [ $checkov_exit_code -ne 0 ]; then
          echo "Checkov found errors, but continuing the pipeline..."
          exit 0  # Set exit code to 0 to prevent pipeline failure
