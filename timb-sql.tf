@@ -5,7 +5,7 @@ resource "azurerm_mssql_server" "timb-prod-sql1" {
     location = azurerm_resource_group.timb_prod_sql.location
     version = "12.0"
     administrator_login = "bauerlogin"
-    administrator_login_password = "4@9iu3UH@o#j5yBW"
+    administrator_login_password = "password"
     minimum_tls_version = "1.2"
     public_network_access_enabled = false
 
